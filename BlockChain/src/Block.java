@@ -20,10 +20,10 @@ public class Block {
 	}
 	public void hackBlock(String d)
 	{		
-		data = d;
-		String contents = blockNum + d + previousHash;
+		this.data = d;
+		String contents = blockNum + previousHash + d;
 		
-		blockHash = SHA.getSHA(contents);
+		this.blockHash = SHA.getSHA(contents);
 	}
 	public String getData()
 	{

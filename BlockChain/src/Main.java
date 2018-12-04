@@ -6,14 +6,40 @@ import java.util.Scanner;
 
 public class Main {
 
+  private static final String StrFormat_DataAndHash = "%d | %50s | %64s\n";
+
 	public static ArrayList<Block> PeerA = new ArrayList<>();
 	public static ArrayList<String> Master = new ArrayList<>();
  	//public static ArrayList<Block> PeerB = new ArrayList<>();
-	//public static ArrayList<Block> PeerC = new ArrayList<>();
+  //public static ArrayList<Block> PeerC = new ArrayList<>();
+  public BlockChain MasterA;
+  public BlockChain MasterB;
 	public static ArrayList<Block> Target;
-	public static int size = 1;
+  public static int size = 1;
+  
+  private static final String[] originalData = {"Why am I so dumb?", "I dun realy know!"};
+
 	public static void main(String[] args)
 	{
+    BlockChain MasterA = new BlockChain();
+    BlockChain MasterB = new BlockChain();
+    MasterA.initialize();
+    MasterB.initialize();
+    for (String x : originalData){
+      MasterA.addBlock(x);
+      MasterB.addBlock(x);
+    }
+    MasterA.CheckInvalidBlock();
+    MasterA.printChain();
+
+    MasterA.alterOneBlock(1, "fuckingGood");
+
+    MasterA.CheckInvalidBlock();
+
+    MasterA.printChain();
+  }
+}
+/*
 		String genData = ("Starting data");
 		Block genesisBlock = new Block(size, "IV" ,genData);
 		PeerA.add(genesisBlock);
@@ -83,7 +109,7 @@ public class Main {
 						break;
 					default:
 						break;
-					}*/
+					}
 					
 					
 					if(Target != null)
@@ -104,7 +130,7 @@ public class Main {
 						default:
 							break;
 						}
-						Target = null;*/
+						Target = null;
 					}
 					break;
 					
@@ -142,12 +168,12 @@ public class Main {
 					{
 						//PeerC must have been altered
 						System.out.println("WARNING: PeerC has a corrupted Block Chain");
-					}*/
+					}
 					break;
 			}//Main Menu Selection Switch
 			
 		}//while loop
 		
 	}
-	
-}
+	*/
+
