@@ -3,7 +3,8 @@ import java.util.Arrays;
 public class Block {
 	private String previousHash;
 	private String data;
-	private int blockNum;
+  private int blockNum;
+  private int nounce;
 	private String blockHash;
 	
 	public Block(int blockNum, String previousHash, String data)
@@ -11,9 +12,23 @@ public class Block {
 		this.blockNum = blockNum;
 		this.previousHash = previousHash;
 		this.data = data;
-		String contents = blockNum + previousHash + data;
+    mine();
+  }
+  public void mine(){
+    int i;
+    String contents = "";
+    
+    for (i = 0; i < 1000000; i++){
+      contents = blockNum + i+ previousHash + data;
+      //System.out.println(contents + SHA.getSHA(blockNum + i+ previousHash + data).substring(0, 3));
+      if (SHA.getSHA(contents).indexOf("000") == 0){
+        break;
+      }
+    }
+    this.nounce = i;
     this.blockHash = SHA.getSHA(contents);
   }
+
 	public String getPreviousHas()
 	{
 		return previousHash;
@@ -21,7 +36,7 @@ public class Block {
 	public void hackBlock(String d)
 	{		
 		this.data = d;
-		String contents = blockNum + previousHash + d;
+		String contents = blockNum + previousHash + + nounce + d;
 		
 		this.blockHash = SHA.getSHA(contents);
 	}
@@ -36,5 +51,16 @@ public class Block {
 	public int getBlockNum()
 	{
 		return blockNum;
-	}
+  }
+  public int getNounce()
+	{
+		return nounce;
+  }
+  public void setPreviousHash(String ph){
+    this.previousHash = ph;
+  }
+  public void reHash(){
+    String contents = blockNum + nounce + previousHash + data;
+		this.blockHash = SHA.getSHA(contents);
+  }
 }

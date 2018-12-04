@@ -11,7 +11,7 @@ public class Main {
 
   public static BlockChain[] Master;
   
-  private static final String[] originalData = {"Alice", "Bob", "Sally"};
+  private static final String[] originalData = {"$1000 Alice -> Bob", "$2000 Alice -> Tony", "$3000 Alice -> Peter"};
 
   public static void demoInitiliaze(){
     Master = new BlockChain[3];
@@ -58,31 +58,34 @@ public class Main {
 		while(loop){
 			System.out.println("\n1 to add block");
 			System.out.println("2 to hack a block");
-      System.out.println("3 to print blockChain");
-      System.out.println("4 to check blockChain Validity");
-      System.out.println("5 Initilalize demo");
-      System.out.println("6 check blockChain with backup master");
+      System.out.println("3 to print current blockChain");
+      System.out.println("4 to print All blockChains");
+      System.out.println("5 check blockChain with backup master");
+      System.out.println("6 Initialize Demo");
 			System.out.println("0 to Exit");
       
       String data;
-			switch(kb.nextInt())
+      int inputInt = kb.nextInt();
+      kb.nextLine();
+			switch(inputInt)
 			{
 				case 0: loop = false;
 					break;
 				case 1: //add a new block to the chain
 					System.out.println("Enter data for new block");
-					data = kb.next();
+					data = kb.nextLine();
           for (BlockChain x: Master)
             x.addBlock(data);
 					break;
 				case 2:
 					System.out.println("Select which block to alter");
           int blockNum = kb.nextInt();
+          kb.nextLine();
           if (blockNum < 0 || blockNum >= Master[0].size() ){
             System.out.println("invalid Block\n");
           }
           else{
-            data = kb.next();
+            data = kb.nextLine();
             System.out.println("Old Data:");
             Master[0].printOneBlock(blockNum);
             Master[0].alterOneBlock(blockNum, data);
@@ -94,18 +97,18 @@ public class Main {
           Master[0].printChain();
           break;
         case 4:
-          Master[0].CheckInvalidBlock();
+          for (BlockChain x : Master)
+            x.printChain();
           break;
         case 5:
-          demoInitiliaze();
+          crossChecking();
           break;
         case 6:
-          crossChecking();
+          demoInitiliaze();
           break;
         default:
           System.out.println("invalid Input\n");
-          break;
-          
+          break;    
         }
       }
     }
