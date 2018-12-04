@@ -1,36 +1,35 @@
 import java.util.Arrays;
 
 public class Block {
-	private int previousHash;
+	private String previousHash;
 	private String data;
 	private int blockNum;
-	private int blockHash;
+	private String blockHash;
 	
-	public Block(int blockNum,int previousHash, String data)
+	public Block(int blockNum, String previousHash, String data)
 	{
 		this.blockNum = blockNum;
 		this.previousHash = previousHash;
 		this.data = data;
-		Object[] contents = {blockNum, data, previousHash};
-		
-		this.blockHash = Arrays.hashCode(contents);
-	}
-	public int getPreviousHas()
+		String contents = blockNum + previousHash + data;
+    this.blockHash = SHA.getSHA(contents);
+  }
+	public String getPreviousHas()
 	{
 		return previousHash;
 	}
 	public void hackBlock(String d)
 	{		
 		data = d;
-		Object[] contents = {blockNum, d, previousHash};
+		String contents = blockNum + d + previousHash;
 		
-		blockHash = Arrays.hashCode(contents);
+		blockHash = SHA.getSHA(contents);
 	}
 	public String getData()
 	{
 		return data;
 	}
-	public int getBlockHash()
+	public String getBlockHash()
 	{
 		return blockHash;
 	}

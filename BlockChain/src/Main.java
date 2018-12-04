@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main {
 
 	public static ArrayList<Block> PeerA = new ArrayList<>();
-	public static ArrayList<Integer> Master = new ArrayList<>();
+	public static ArrayList<String> Master = new ArrayList<>();
  	//public static ArrayList<Block> PeerB = new ArrayList<>();
 	//public static ArrayList<Block> PeerC = new ArrayList<>();
 	public static ArrayList<Block> Target;
@@ -15,7 +15,7 @@ public class Main {
 	public static void main(String[] args)
 	{
 		String genData = ("Starting data");
-		Block genesisBlock = new Block(size,0,genData);
+		Block genesisBlock = new Block(size, "IV" ,genData);
 		PeerA.add(genesisBlock);
 		Master.add(genesisBlock.getBlockHash());
 		//PeerB.add(genesisBlock);
