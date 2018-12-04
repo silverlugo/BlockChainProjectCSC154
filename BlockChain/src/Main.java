@@ -3,177 +3,111 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Scanner;
+import java.util.Vector;
 
 public class Main {
 
   private static final String StrFormat_DataAndHash = "%d | %50s | %64s\n";
 
-	public static ArrayList<Block> PeerA = new ArrayList<>();
-	public static ArrayList<String> Master = new ArrayList<>();
- 	//public static ArrayList<Block> PeerB = new ArrayList<>();
-  //public static ArrayList<Block> PeerC = new ArrayList<>();
-  public BlockChain MasterA;
-  public BlockChain MasterB;
-	public static ArrayList<Block> Target;
-  public static int size = 1;
+  public static BlockChain[] Master;
   
-  private static final String[] originalData = {"Why am I so dumb?", "I dun realy know!"};
+  private static final String[] originalData = {"Alice", "Bob", "Sally"};
+
+  public static void demoInitiliaze(){
+    Master = new BlockChain[3];
+    for (int i = 0 ; i < Master.length; i++){
+      Master[i] = new BlockChain();
+      Master[i].initialize();
+      for (String x : originalData)
+        Master[i].addBlock(x);
+    }
+  }
+  public static void crossChecking(){
+    Vector<Integer> errorIndex = new Vector<Integer>();
+    for (int i = 0; i < Master[0].size(); i++){
+      String hash = Master[0].getBlockHash(i);
+      for (BlockChain x : Master){
+        if (!x.getBlockHash(i).equals(hash)){
+          errorIndex.add(i);
+          break;
+        }
+      }
+    }
+    if (errorIndex.size() == 0)
+      System.out.println("ALL OK");
+    else{
+      for (Integer i : errorIndex)
+        for (BlockChain b : Master){
+          b.printOneBlock(i);
+        }
+    }
+
+  }
 
 	public static void main(String[] args)
 	{
-    BlockChain MasterA = new BlockChain();
-    BlockChain MasterB = new BlockChain();
-    MasterA.initialize();
-    MasterB.initialize();
-    for (String x : originalData){
-      MasterA.addBlock(x);
-      MasterB.addBlock(x);
+    
+    demoInitiliaze();
+    
+    for (BlockChain x : Master){
+      x.CheckInvalidBlock();
+      x.printChain();
     }
-    MasterA.CheckInvalidBlock();
-    MasterA.printChain();
-
-    MasterA.alterOneBlock(1, "fuckingGood");
-
-    MasterA.CheckInvalidBlock();
-
-    MasterA.printChain();
-  }
-}
-/*
-		String genData = ("Starting data");
-		Block genesisBlock = new Block(size, "IV" ,genData);
-		PeerA.add(genesisBlock);
-		Master.add(genesisBlock.getBlockHash());
-		//PeerB.add(genesisBlock);
-		//PeerC.add(genesisBlock);
-		size++;
-		
-		String data2 = ("secondary data");
-		Block block2 = new Block(size,genesisBlock.getBlockHash(),data2);
-		PeerA.add(block2);
-		Master.add(block2.getBlockHash());
-		//PeerB.add(block2);
-		//PeerC.add(block2);
-		size++;
-		
-		
-		boolean loop = true; 
-		Scanner kb = new Scanner(System.in);
-		while(loop)
-		{
-			System.out.println("1 to add block");
+    Scanner kb = new Scanner(System.in);
+    boolean loop = true;
+		while(loop){
+			System.out.println("\n1 to add block");
 			System.out.println("2 to hack a block");
-			System.out.println("3 to display current block chain");
+      System.out.println("3 to print blockChain");
+      System.out.println("4 to check blockChain Validity");
+      System.out.println("5 Initilalize demo");
+      System.out.println("6 check blockChain with backup master");
 			System.out.println("0 to Exit");
-			
-			System.out.println("PeerA  Hash:"+(PeerA.get(PeerA.size()-1)).getBlockHash());
-			System.out.println("Master Record:"+Master.get(Master.size()-1));
-			
-			
-			//System.out.println("PeerB  Hash:"+(PeerB.get(PeerB.size()-1)).getBlockHash());
-			//System.out.println("PeerC  Hash:"+(PeerC.get(PeerC.size()-1)).getBlockHash());
-			
+      
+      String data;
 			switch(kb.nextInt())
 			{
 				case 0: loop = false;
 					break;
 				case 1: //add a new block to the chain
 					System.out.println("Enter data for new block");
-					String data = kb.next();
-					Block newBlock = new Block(size, (PeerA.get(PeerA.size()-1)).getBlockHash() , data);
-					PeerA.add(newBlock);
-					Master.add(newBlock.getBlockHash());
-					//PeerB.add(newBlock);
-					//PeerC.add(newBlock);
-					size++;
+					data = kb.next();
+          for (BlockChain x: Master)
+            x.addBlock(data);
 					break;
-				case 2://hack a block to alter data
-					//System.out.println("Select who's block chain who attack: A  B  C");
-					//String peer = kb.next();
+				case 2:
 					System.out.println("Select which block to alter");
-					for(int i = 1; i < size; i++)
-					{
-						System.out.print(""+(i)+",");
-					}
-					int blk = kb.nextInt()-1;
-					
-					
-					Target = PeerA;
-					/*switch(peer) //copy the selected peer blockchain
-					{
-					case "A":Target = PeerA;
-						break;
-					case "B": Target = PeerB;
-						break;
-					case "C":Target = PeerC;
-						break;
-					default:
-						break;
-					}
-					
-					
-					if(Target != null)
-					{
-						System.out.println("Block data:"+Target.get(blk).getData());
-						System.out.println("Enter replacement data:");
-						String fakeData = kb.next();
-						Target.get(blk).hackBlock(fakeData); //alter selected block
-						
-						/*switch(peer)//alter the selected peers blockchain
-						{
-						case "A": PeerA = Target;
-							break;
-						case "B":  PeerB = Target ;
-							break;
-						case "C": PeerC = Target;
-							break;
-						default:
-							break;
-						}
-						Target = null;
-					}
-					break;
-					
-				case 3://display current block chain					
-					//.get(size-1).getBlockHash() will grab the last block in the chain and return its hash
-					boolean change = false;
-					for(int j = 0; j < Master.size(); j++)
-					{
-						if(Master.get(j) != (PeerA.get(j).getBlockHash()))
-						{
-							change = true;
-						}
-					}
-					if(change == true)
-					{
-						System.out.println("Change Detected");
-					}
-					else { System.out.println("No Change detected");}
-					
-					/*if(PeerA.get(size-2).getBlockHash() == PeerB.get(size-2).getBlockHash() && PeerA.get(size-2).getBlockHash() == PeerC.get(size-2).getBlockHash())
-					{
-						System.out.println("No Change Detected ");
-					}
-					else if(PeerA.get(size-2).getBlockHash() != PeerB.get(size-2).getBlockHash() && PeerA.get(size-2).getBlockHash() != PeerC.get(size-2).getBlockHash())
-					{
-						//PeerA altered
-						System.out.println("WARNING: PeerA has a corrupted Block Chain");
-					}
-					else if(PeerB.get(size-2).getBlockHash() != PeerA.get(size-2).getBlockHash() && PeerB.get(size-2).getBlockHash() != PeerC.get(size-2).getBlockHash())
-					{
-						//PeerB altered
-						System.out.println("WARNING: PeerB has a corrupted Block Chain");
-					}
-					else
-					{
-						//PeerC must have been altered
-						System.out.println("WARNING: PeerC has a corrupted Block Chain");
-					}
-					break;
-			}//Main Menu Selection Switch
-			
-		}//while loop
-		
-	}
-	*/
+          int blockNum = kb.nextInt();
+          if (blockNum < 0 || blockNum >= Master[0].size() ){
+            System.out.println("invalid Block\n");
+          }
+          else{
+            data = kb.next();
+            System.out.println("Old Data:");
+            Master[0].printOneBlock(blockNum);
+            Master[0].alterOneBlock(blockNum, data);
+            System.out.println("New Data:");
+            Master[0].printOneBlock(blockNum);
+          }
+          break;
+        case 3:
+          Master[0].printChain();
+          break;
+        case 4:
+          Master[0].CheckInvalidBlock();
+          break;
+        case 5:
+          demoInitiliaze();
+          break;
+        case 6:
+          crossChecking();
+          break;
+        default:
+          System.out.println("invalid Input\n");
+          break;
+          
+        }
+      }
+    }
+  }
 
