@@ -36,10 +36,13 @@ public class Main {
     if (errorIndex.size() == 0)
       System.out.println("ALL OK");
     else{
-      for (Integer i : errorIndex)
-        for (BlockChain b : Master){
-          b.printOneBlock(i);
+      for (Integer err : errorIndex){
+        for (int i = 0; i < Master.length; i++){
+          System.out.printf("BlockChain %d: ", i);
+          Master[i].printOneBlock(err);
         }
+        System.out.println();
+      }
     }
 
   }
@@ -81,24 +84,29 @@ public class Main {
 					System.out.println("Select which block to alter");
           int blockNum = kb.nextInt();
           kb.nextLine();
+          System.out.printf("Enter new data to Block %d\n", blockNum);
           if (blockNum < 0 || blockNum >= Master[0].size() ){
             System.out.println("invalid Block\n");
           }
           else{
             data = kb.nextLine();
-            System.out.println("Old Data:");
-            Master[0].printOneBlock(blockNum);
+            System.out.println("Old BlockChain:");
+            Master[0].printChain();
             Master[0].alterOneBlock(blockNum, data);
-            System.out.println("New Data:");
-            Master[0].printOneBlock(blockNum);
+            System.out.println("New BlockChain:");
+            Master[0].printChain();
+
           }
           break;
         case 3:
           Master[0].printChain();
           break;
         case 4:
-          for (BlockChain x : Master)
-            x.printChain();
+          for (int i = 0; i < Master.length; i++){
+            System.out.printf("BlockChain %d:\n", i);
+            Master[i].printChain();
+          }
+            
           break;
         case 5:
           crossChecking();
@@ -110,6 +118,7 @@ public class Main {
           System.out.println("invalid Input\n");
           break;    
         }
+        kb.nextLine();
       }
     }
   }

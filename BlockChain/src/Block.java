@@ -4,9 +4,11 @@ public class Block {
 	private String previousHash;
 	private String data;
   private int blockNum;
-  private int nounce;
+  private int nonce;
 	private String blockHash;
-	
+  
+  private static final String StrFomratChainDetials = "index: %2d |nonce: %-5d |data: %-30s |previous hash: %-64s | hash: %-64s\n";
+
 	public Block(int blockNum, String previousHash, String data)
 	{
 		this.blockNum = blockNum;
@@ -25,7 +27,7 @@ public class Block {
         break;
       }
     }
-    this.nounce = i;
+    this.nonce = i;
     this.blockHash = SHA.getSHA(contents);
   }
 
@@ -36,7 +38,7 @@ public class Block {
 	public void hackBlock(String d)
 	{		
 		this.data = d;
-		String contents = blockNum + previousHash + + nounce + d;
+		String contents = blockNum + previousHash + + nonce + d;
 		
 		this.blockHash = SHA.getSHA(contents);
 	}
@@ -52,15 +54,19 @@ public class Block {
 	{
 		return blockNum;
   }
-  public int getNounce()
+  public int getNonce()
 	{
-		return nounce;
+		return nonce;
   }
   public void setPreviousHash(String ph){
     this.previousHash = ph;
   }
   public void reHash(){
-    String contents = blockNum + nounce + previousHash + data;
+    String contents = blockNum + nonce + previousHash + data;
 		this.blockHash = SHA.getSHA(contents);
+  }
+  @Override
+  public String toString(){
+    return String.format(StrFomratChainDetials, blockNum, nonce, data, previousHash, blockHash);
   }
 }
