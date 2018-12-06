@@ -57,10 +57,9 @@ public class Main {
 	{
     
     demoInitiliaze();
-    
-    for (BlockChain x : Master){
-      x.CheckInvalidBlock();
-      x.printChain();
+    for (int i = 0; i < Master.length; i++){
+      System.out.printf("\nBlockChain %d:\n", i);
+      Master[i].printChain();
     }
     Scanner kb = new Scanner(System.in);
     boolean loop = true;
