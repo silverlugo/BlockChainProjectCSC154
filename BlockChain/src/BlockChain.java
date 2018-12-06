@@ -2,10 +2,11 @@ import java.util.Vector;
 
 public class BlockChain{
   private Vector<Block> chains;
-
+  private static final String StrFomratHeader1 = " index | nonce |             data               |                     previous hash                                |                            hash                              \n";
+  private static final String StrFomratHeader2 = " -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+  private static final String StrFomratHeader = StrFomratHeader1 + StrFomratHeader2;
   private static final String IV = "HelloWorld";
   private static final String StrFomratHashCheck = "Error: Block: %d |hashcheck: %-64s | hashRecord: %-64s\n";
-  private static final String StrFomratChainDetials = "index: %d |nounce: %d|data: %-30s |previous hash: %-64s | hash: %-64s\n";
   public BlockChain(){
     chains = new Vector<Block>();
   }
@@ -50,6 +51,7 @@ public class BlockChain{
   }
 
   public void printChain(){
+    System.out.printf(StrFomratHeader);
     for (int i = 0; i < size(); i++){
       Block x = this.chains.get(i);
       System.out.print(x.toString());

@@ -5,7 +5,12 @@ import java.util.Date;
 import java.util.Scanner;
 import java.util.Vector;
 
+
 public class Main {
+
+  private static final String StrFomratHeader1 = " Chain index | Block index | nonce |             data               |                     previous hash                                |                            hash                              \n";
+  private static final String StrFomratHeader2 = " ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n";
+  private static final String StrFomratHeader = StrFomratHeader1 + StrFomratHeader2;
 
   private static final String StrFormat_DataAndHash = "%d | %50s | %64s\n";
 
@@ -36,12 +41,13 @@ public class Main {
     if (errorIndex.size() == 0)
       System.out.println("ALL OK");
     else{
+      System.out.printf(StrFomratHeader);
       for (Integer err : errorIndex){
         for (int i = 0; i < Master.length; i++){
-          System.out.printf("BlockChain %d: ", i);
+          System.out.printf("     %d       |      ", i);
           Master[i].printOneBlock(err);
         }
-        System.out.println();
+        System.out.print(StrFomratHeader2);
       }
     }
 
@@ -94,7 +100,7 @@ public class Main {
             System.out.println("Old BlockChain:");
             Master[0].printChain();
             Master[0].alterOneBlock(blockNum, data);
-            System.out.println("New BlockChain:");
+            System.out.println("\nNew BlockChain:");
             Master[0].printChain();
 
           }
