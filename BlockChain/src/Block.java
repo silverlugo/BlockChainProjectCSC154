@@ -7,7 +7,7 @@ public class Block {
   private int nonce;
 	private String blockHash;
   
-  private static final String StrFomratChainDetials = "index: %2d |nonce: %-5d |data: %-30s |previous hash: %-64s | hash: %-64s\n";
+  private static final String StrFomratChainDetials = "index: %2d |nonce: %-5d |data: %-30s |previous hash: %-64s | hash: %-64s";
 
 	public Block(int blockNum, String previousHash, String data)
 	{
@@ -67,6 +67,9 @@ public class Block {
   }
   @Override
   public String toString(){
-    return String.format(StrFomratChainDetials, blockNum, nonce, data, previousHash, blockHash);
+    String res =  String.format(StrFomratChainDetials, blockNum, nonce, data, previousHash, blockHash);
+    if (blockHash.indexOf("000") == 0)
+      return res + "\n";
+    return res +" *** ALERT ***\n"; 
   }
 }

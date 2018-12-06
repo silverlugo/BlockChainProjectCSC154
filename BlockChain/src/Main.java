@@ -79,6 +79,7 @@ public class Main {
 					data = kb.nextLine();
           for (BlockChain x: Master)
             x.addBlock(data);
+          Master[0].printChain();
 					break;
 				case 2:
 					System.out.println("Select which block to alter");
@@ -103,7 +104,7 @@ public class Main {
           break;
         case 4:
           for (int i = 0; i < Master.length; i++){
-            System.out.printf("BlockChain %d:\n", i);
+            System.out.printf("\nBlockChain %d:\n", i);
             Master[i].printChain();
           }
             
